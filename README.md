@@ -1,5 +1,5 @@
 # Link: http://ec2-54-164-126-240.compute-1.amazonaws.com:4567/#!/login
-(Note:  Won't work unless I start the server. Email me at mwindlinger@gmail.com if you'd like to see it). 
+(Note:  Won't work unless I start the server. Email me at mwindlinger@gmail.com if you'd like to see it) 
 
 A social platform for users to post their moments (similar to Facebook posts) in a microblog/social media style.
 
