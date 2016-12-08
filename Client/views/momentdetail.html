@@ -1,0 +1,92 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#!/home">$ cat my.moment</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#!/home">Home</a></li>
+        <li><a href="#!/user/{{$root.username}}">My Moments</a></li>
+        <li><a href="#!/search">Search Moments</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a ng-click="logout()">Log Out <span class="sr-only">(current)</span></a>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+<br />
+<br />
+<div class="container">
+    <div ng-hide="hideWarningMsg" ng-click="hideWarningMsg=true" class="alert alert-danger" role="alert">
+        {{warningMsg}}
+      </div>
+</div>
+<div class="container">
+<div class="well">
+        <!--Photo-->
+        <div>
+            <img src="{{theMoment.photoSrc}}" alt="Moment of {{theMoment.author}}" class="img-rounded moment-img"> <!--Set width !!!-->
+        </div>
+        <br />
+        <!--info-->
+        <div class="container" style="width:100%">
+            <h4>
+            <!--emoji-->
+            <span ng-switch on="moment.emotion">
+                <div class="label label-warning" ng-switch-when="happiness">٩(◕‿◕)۶</div>
+                <div class="label label-info" ng-switch-when="contempt">(￣ヘ￣)</div>
+                <div class="label label-danger" ng-switch-when="anger">ヽ( `д´*)ノ</div>
+                <div class="label label-danger" ng-switch-when="disgust">(；￣Д￣)</div>
+                <div class="label label-danger" ng-switch-when="fear">Σ(°△°|||)︴</div>
+                <div class="label label-success" ng-switch-when="neutral">ヽ(￣～￣　)ノ</div>
+                <div class="label label-primary" ng-switch-when="sadness">(╯︵╰,)</div>
+                <div class="label label-warning" ng-switch-when="surprise">(⊙ _ ⊙)</div>
+                <div class="label label-default" ng-switch-when="default">.｡☆:.･ﾟﾟ☆</div>
+                <!--<img src="public/emoji/!!!" alt="" ng-switch-when="happy">--> <!--Set emoji and emotion !!!-->
+            </span>
+            <!--description-->
+            <span>
+                {{theMoment.description}}
+            </span>
+            <!--vote-->
+            <span style="position: absolute;right: 150px">
+                <button class="btn btn-xs btn-info" ng-hide="dohideVoter" ng-click="dohideVoter=true; detailSendVote(1)">+1</button>
+                <span>
+                {{theMoment.vote}}
+                </span>
+                <button class="btn btn-xs btn-info" ng-hide="dohideVoter" ng-click="dohideVoter=true; detailSendVote(-1)">-1</button>
+            </span>
+            </h4>
+            <br>
+            <!--author and datetime-->
+            <h5>
+            <div style="position: absolute;right: 150px">
+                posted by {{theMoment.author}} at {{theMoment.time}}
+            </div>
+            </h5>
+        </div>
+                <br />
+        <br />
+        <!--comment-->
+        <div class="well">
+            <!--comments-->
+            <div class="well" ng-repeat="comment in theMoment.comments | orderBy:'-orderTime'">
+                <h4>{{comment.text}}&emsp;&emsp;&emsp;--{{comment.author}}&nbsp;{{comment.time}}</h4>
+            </div>
+            <!--add comment-->
+            <div>
+                <form method="post" class="form-group">
+                    <input type="text" class="form-control" ng-model="detailAddComment" placeholder="Add your comment...">
+                </form>
+                <button class="btn btn-sm btn-default" ng-click="detailSendComment()">Submit</button>
+            </div>
+        </div>
+    </div>
+    </div>

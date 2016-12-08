@@ -1,0 +1,112 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#!/home">$ cat my.moment</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#!/home">Home</a></li>
+        <li><a href="#!/user/{{$root.username}}">My Moments</a></li>
+        <li><a href="#!/search">Search Moments</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a ng-click="logout()">Log Out <span class="sr-only">(current)</span></a>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+<br />
+<br />
+
+    <div ng-hide="hideWarningMsg" ng-click="hideWarningMsg=true" class="alert alert-danger" role="alert">
+        {{warningMsg}}
+      </div>
+
+<div class="container">
+
+    <div ng-repeat="moment in myMoments" class="well">
+        <!--Photo-->
+        <a href="#!/moment/{{moment.id}}">
+            <div>
+                <img src="{{moment.photoSrc}}" alt="Moment of {{moment.author}}"  class="img-rounded moment-img"> <!--Set width !!!-->
+            </div>
+        </a>
+        <br />
+        <!--info-->
+        <div class="container" style="width:100%">
+            <!--emoji-->
+            <h4>
+            <span ng-switch on="moment.emotion">
+                <div class="label label-warning" ng-switch-when="happiness">٩(◕‿◕)۶</div>
+                <div class="label label-info" ng-switch-when="contempt">(￣ヘ￣)</div>
+                <div class="label label-danger" ng-switch-when="anger">ヽ( `д´*)ノ</div>
+                <div class="label label-danger" ng-switch-when="disgust">(；￣Д￣)</div>
+                <div class="label label-danger" ng-switch-when="fear">Σ(°△°|||)︴</div>
+                <div class="label label-success" ng-switch-when="neutral">ヽ(￣～￣　)ノ</div>
+                <div class="label label-primary" ng-switch-when="sadness">(╯︵╰,)</div>
+                <div class="label label-warning" ng-switch-when="surprise">(⊙ _ ⊙)</div>
+                <div class="label label-default" ng-switch-when="default">.｡☆:.･ﾟﾟ☆</div>
+                <!--<img src="public/emoji/!!!" alt="" ng-switch-when="happy">--> <!--Set emoji and emotion !!!-->
+            </span>
+            <!--description-->
+            <a href="#!/moment/{{moment.id}}">
+                <div>
+                    {{moment.description}}
+                </div>
+            </a>
+            <!--vote-->
+            <span style="position: absolute;right: 150px">
+                <span>{{moment.vote}}</span>
+            </span>
+            </h4>
+            <!--author and datetime-->
+            <h5><div>
+                posted by {{moment.author}} at {{moment.time}}
+            </div></h5>
+            
+        </div>
+        <!--comment-->
+        <div class="well">
+            <!--comments-->
+            <div class="well" ng-repeat="comment in moment.comments | orderBy:'-orderTime' | limitTo:5">
+            <h4>
+                {{comment.text}}&emsp;&emsp;&emsp;--{{comment.author}}&nbsp;{{comment.time}}
+                </h4>
+
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-danger" ng-click="deleteMoment($index)">Delete Moment</button>
+
+            <button type="button" class="btn btn-sm btn-success" ng-click="showEditor['editor_'+$index]=!showEditor['editor_'+$index]">Edit Moment</button>
+
+            <div class="Vertical-collapse" uib-collapse="!showEditor['editor_'+$index]" vertical>
+                <div class="well well-lg">
+                    <form method="post" class="form-group">
+                        <select class="form-control" ng-model="emotionBoxes['emo'+$index]">
+                            <option value="happiness">٩(◕‿◕)۶</option>
+                            <option value="contempt">(￣ヘ￣)</option>
+                            <option value="anger">ヽ( `д´*)ノ</option>
+                            <option value="disgust">(；￣Д￣)</option>
+                            <option value="fear">Σ(°△°|||)︴</option>
+                            <option value="neutral">ヽ(￣～￣　)ノ</option>
+                            <option value="sadness">(╯︵╰,)</option>
+                            <option value="surprise">(⊙ _ ⊙)</option>
+                            <option value="default">.｡☆:.･ﾟﾟ☆</option>
+                                    <!--Emotions !!!-->
+                        </select>
+                        <input type="text" class="form-control" ng-model="editBoxes['edit'+$index]">
+                    </form>
+                    <button class="btn btn-sm btn-success" ng-click="editMoment($index)">Submit Edit</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

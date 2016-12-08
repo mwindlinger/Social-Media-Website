@@ -1,0 +1,137 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#!/home">$ cat my.moment</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#!/home">Home</a></li>
+        <li><a href="#!/user/{{$root.username}}">My Moments</a></li>
+        <li><a href="#!/search">Search Moments</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a ng-click="logout()">Log Out <span class="sr-only">(current)</span></a>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+<br />
+<br />
+<div class="container">
+    <div ng-hide="hideWarningMsg" ng-click="hideWarningMsg=true" class="alert alert-danger" role="alert">
+        {{warningMsg}}
+      </div>
+<div class="jumbotron">
+    <div class="form-group">
+    <form ng-controller="uploadCtrl as ctrl" name="ctrl.upload_form">
+        <img style="width:100%;" ng-show="!!ctrl.file" ngf-thumbnail="ctrl.file" class="img-thumbnail"/> <!--ngf-thumbnail="ctrl.file || '/public/asset/defaultthumb.jpg'"-->
+        <br />
+        <input class="form-control" type="text" name="description" ng-model="ctrl.description" placeholder="How do you feel at this moment?"/>
+        <br />
+        <label class="btn btn-default btn-file">Upload Photo
+        <input style="display: none;"
+            type="file" 
+            ngf-select 
+            ng-model="ctrl.file" 
+            name="file" 
+            ngf-pattern="'image/*'"
+            accept="image/*" 
+            ngf-max-size="5MB" 
+            />
+        </label>
+           <!--assets/defaultthumb.jpg-->
+        <button style="right:10px;" type="submit" ng-click="ctrl.momentSubmit()" class="btn btn-default">submit</button>
+        <div class="alert alert-warning" ng-show="ctrl.upload_form.file.$error.required" role="alert">
+            <strong>*required</strong>
+        </div>
+        <div class="alert alert-warning" ng-show="ctrl.upload_form.file.$error.maxSize" role="alert">
+            File too large {{ctrl.file.size / 1000000|number:1}}MB: max 5M
+        </div>
+        
+        
+    </form>
+    </div>
+</div>
+</div>
+    
+<!-- | orderBy:'-orderTime'-->
+<div class="container">
+    <!--show update notice-->
+    <div class="alert alert-info" ng-hide="hideUpdateMsg" role="alert" ng-click="hideUpdateMsg=true">
+        <strong>Update:</strong> A new moment has been posted.<button ng-click="update()" class="btn btn-sm btn-info">Update</button>
+      </div>
+    <div ng-repeat="moment in moments | limitTo:30" class="well">
+        <!--Photo-->
+        <a href="#!/moment/{{moment.id}}">
+            <div>
+                <center><img src="{{moment.photoSrc}}" width = "40" alt="Moment of {{moment.author}}" class="img-rounded moment-img"></center> <!--Set width !!!-->
+            </div>
+        </a>
+        <br />
+        <!--info-->
+        <div class="container" style="width:100%">
+            <!--emoji-->
+            <h4>
+            <span ng-switch on="moment.emotion">
+                <div class="label label-warning" ng-switch-when="happiness">٩(◕‿◕)۶</div>
+                <div class="label label-info" ng-switch-when="contempt">(￣ヘ￣)</div>
+                <div class="label label-danger" ng-switch-when="anger">ヽ( `д´*)ノ</div>
+                <div class="label label-danger" ng-switch-when="disgust">(；￣Д￣)</div>
+                <div class="label label-danger" ng-switch-when="fear">Σ(°△°|||)︴</div>
+                <div class="label label-success" ng-switch-when="neutral">ヽ(￣～￣　)ノ</div>
+                <div class="label label-primary" ng-switch-when="sadness">(╯︵╰,)</div>
+                <div class="label label-warning" ng-switch-when="surprise">(⊙ _ ⊙)</div>
+                <div class="label label-default" ng-switch-when="default">.｡☆:.･ﾟﾟ☆</div>
+                <!--<img src="public/emoji/!!!" alt="" ng-switch-when="happy">--> <!--Set emoji and emotion !!!-->
+            </span>
+            <!--description-->
+            <a href="#!/moment/{{moment.id}}">
+                <span>
+                    {{moment.description}}
+                </span>
+            </a>
+            <!--vote-->
+            <span style="position: absolute;right: 150px">
+                <button class="btn btn-xs btn-info" ng-hide="hideVoter['voter_'+$index]" ng-click="hideVoter['voter_'+$index]=true; sendVote($index,1)">+1</button>
+                <span>{{moment.vote}}</span>
+                <button class="btn btn-xs btn-info" ng-hide="hideVoter['voter_'+$index]" ng-click="hideVoter['voter_'+$index]=true; sendVote($index,-1)">-1</button>
+            </span>
+            </h4>
+            <!--author and datetime-->
+            <h5>
+            <div style="position: absolute;right: 150px">
+                posted by {{moment.author}} at {{moment.time}}
+            </div>
+            </h5>
+        </div>
+        <br />
+        <br />
+        
+        <!--comment-->
+        <div class="well">
+            <!--comments-->
+            <div class="well" ng-repeat="comment in moment.comments | orderBy:'-orderTime' | limitTo:5">
+                <h4>{{comment.text}}&emsp;&emsp;&emsp;--{{comment.author}}&nbsp;{{comment.time}}</h4>
+            </div>
+            <!--add comment-->
+            <div class="form-group">
+                <form method="post">
+                    <input class="form-control" type="text" ng-model="commentBoxes['comBox'+$index]" placeholder="Add your comment...">
+                </form>
+                <br />
+                <button class="btn btn-sm btn-default" ng-click="sendComment($index)">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Citation
+Upload
+    https://code.ciphertrick.com/2015/12/07/file-upload-with-angularjs-and-nodejs/
+-->

@@ -1,0 +1,40 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#!/login">$ cat my.moment</a>
+    </div>
+  </div>
+</nav>
+<br />
+<br />
+<div class="container" ng-init="hideWarningMsg=true;">
+    <div ng-hide="hideWarningMsg" ng-click="hideWarningMsg=true" class="alert alert-danger" role="alert">
+        {{warningMsg}}
+      </div>
+</div>
+
+<div class="container">
+
+      <form class="form-signin">
+      	<h2 class="form-signin-heading">Please sign in</h2>
+    <input class="form-control" type="text" ng-model="login.username" placeholder="Username" required autofocus>
+    <input type="password" class="form-control" ng-model="login.password" placeholder="Password" required>
+    <br />
+</form>
+    <button style="position: absolute;left: 45%" class="btn btn-lg btn-primary" ng-click="tryLogin()">Sign In</button>
+    <br>
+    <br><br><br>
+    <a href="#!/signup">
+    <button style="position: absolute;left: 45%" class="btn btn-lg btn-primary">Sign Up</button>
+    </a>
+
+
+
+    <br><br><br>
+    </div>
